@@ -1,10 +1,3 @@
-/*
- * Tycoon Simulator - Full Java Project
- * Technologies: Java SE, Java Swing, OOP, File I/O, Event Handling
- * Features: Startup Management, Turn-based Gameplay, Hiring System,
- * Progress Tracking, Random Events, Save/Load System
- */
-
  import javax.swing.*;
  import java.awt.*;
  import java.awt.event.*;
@@ -27,44 +20,62 @@
      private Random random = new Random();
  
      public TycoonSimulator() {
-         setTitle("Tycoon Simulator");
-         setSize(800, 600);
-         setDefaultCloseOperation(EXIT_ON_CLOSE);
-         setLayout(new BorderLayout());
- 
-         weekLabel.setText("Week: " + week);
-         weekLabel.setFont(new Font("Arial", Font.BOLD, 24));
-         weekLabel.setHorizontalAlignment(SwingConstants.CENTER);
-         add(weekLabel, BorderLayout.NORTH);
- 
-         // Stats Panel
-         statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-         statsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-         statsLabel.setText(updateStats());
-         add(statsLabel, BorderLayout.CENTER);
- 
-         // Employee display
-         employeeDisplay.setEditable(false);
-         updateEmployeeDisplay();
-         add(new JScrollPane(employeeDisplay), BorderLayout.WEST);
- 
-         // Event display
-         eventDisplay.setEditable(false);
-         add(new JScrollPane(eventDisplay), BorderLayout.EAST);
- 
-         // Buttons
-         JPanel buttonPanel = new JPanel(new GridLayout(2, 4));
-         String[] buttons = {"Add Employee", "Next Week", "Save Game", "Load Game",
-                             "Develop Product", "Remove Employee", "Promote Product", "Improve Quality", "Surrender"};
- 
-         for (String btnText : buttons) {
-             JButton btn = new JButton(btnText);
-             btn.addActionListener(this::handleButton);
-             buttonPanel.add(btn);
-         }
- 
-         add(buttonPanel, BorderLayout.SOUTH);
-     }
+        setTitle("Tycoon Simulator");
+        setSize(1000, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
+    
+        // Top: Week label
+        weekLabel.setText("Week: " + week);
+        weekLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        weekLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(weekLabel, BorderLayout.NORTH);
+    
+        // === Employee Panel (Left) ===
+        employeeDisplay.setEditable(false);
+        updateEmployeeDisplay();
+        JScrollPane employeeScroll = new JScrollPane(employeeDisplay);
+        employeeScroll.setPreferredSize(new Dimension(300, 0));
+        JPanel employeePanel = new JPanel(new BorderLayout());
+        employeePanel.add(new JLabel("Employees:", SwingConstants.CENTER), BorderLayout.NORTH);
+        employeePanel.add(employeeScroll, BorderLayout.CENTER);
+    
+        // === Center Panel: Stats + Events ===
+        statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        statsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        statsLabel.setText(updateStats());
+    
+        eventDisplay.setEditable(false);
+        JScrollPane eventScroll = new JScrollPane(eventDisplay);
+        eventScroll.setPreferredSize(new Dimension(400, 200));
+    
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        centerPanel.add(statsLabel, BorderLayout.NORTH);
+        centerPanel.add(eventScroll, BorderLayout.CENTER);
+    
+        // === Split View: Left (employees) + Center (stats/events) ===
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, employeePanel, centerPanel);
+        splitPane.setDividerLocation(300);
+        add(splitPane, BorderLayout.CENTER);
+    
+        // === Button Panel (Bottom) ===
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 3, 10, 10));
+        String[] buttons = {
+            "Add Employee", "Next Week", "Save Game",
+            "Load Game", "Develop Product", "Remove Employee",
+            "Promote Product", "Improve Quality", "Surrender"
+        };
+    
+        for (String btnText : buttons) {
+            JButton btn = new JButton(btnText);
+            btn.addActionListener(this::handleButton);
+            buttonPanel.add(btn);
+        }
+    
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+    
  
      private String updateStats() {
          return String.format("<html><center>Revenue: %d PHP<br>Users: %d<br>Quality: %d%%<br>Growth: %d%%</center></html>",
