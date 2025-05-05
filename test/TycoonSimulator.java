@@ -194,6 +194,7 @@ if (obj instanceof ArrayList<?>) {
     // Handle the case where the object is not of the expected type
     System.out.println("The object is not an ArrayList<Employee>.");
 }
+//bilat
 
                 } catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
