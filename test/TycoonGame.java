@@ -98,6 +98,7 @@ public class TycoonGame {
         private double promotionBudget;
         private double innovationBudget;
         private double startupBudget;
+        private boolean eventTriggeredThisWeek;
 
         public Game(String playerName) {
             this.playerName = playerName;
@@ -111,6 +112,7 @@ public class TycoonGame {
             this.innovationBudget = 500;
             this.startupBudget = 10000 + random.nextInt(50000);
             this.revenue += startupBudget;
+            this.eventTriggeredThisWeek = false;
             generateRandomGoal();
         }
 
@@ -148,6 +150,13 @@ public class TycoonGame {
             weeks++;
             if (isBankrupt) return;
 
+            eventTriggeredThisWeek = false;
+            
+            if (random.nextDouble() < 0.3) {
+                triggerRandomEvent();
+                eventTriggeredThisWeek = true;
+            }
+
             double totalRevenueThisWeek = 0;
 
             for (Product p : products) {
@@ -174,48 +183,86 @@ public class TycoonGame {
             revenue -= (promotionBudget + innovationBudget);
 
             if (revenue < 0) isBankrupt = true;
-
-            
-            triggerRandomEvent();
         }
 
         private void triggerRandomEvent() {
             if (isBankrupt) return; 
 
             String[] events = {
-                    "A new investor has joined your company! You receive $5000.",
-                    "Market trends have shifted, causing a decline in product sales. Lose $2000.",
-                    "A competitor has launched a similar product. Lose $3000 in revenue.",
-                    "Your product has gone viral! Gain $7000 in revenue.",
-                    "A new technology has emerged, increasing your innovation budget by $2000.",
-                    "Employee morale is low, resulting in a $1000 loss in revenue."
+                "Economic Boom: Your products are in high demand! All product users increased by 20% and revenue by 15%.",
+                "Recession: Customers are spending less. All product users decreased by 15% and revenue by 10%.",
+                "Tech Breakthrough: Your innovation team made a discovery! All product qualities increased by 10 points and innovation budget increased by $2000.",
+                "Employee Strike: Your employees are unhappy with their conditions! All employee happiness decreased by 20 points.",
+                "Viral Marketing: Your marketing campaign went viral! All product promotion effects increased by 15 points and promotion budget increased by $1500.",
+                "Supply Chain Issues: Production delays hurt your business. All product qualities decreased by 5 points.",
+                "New Competitor: A new competitor entered your market. All product users decreased by 10%.",
+                "Tax Windfall: You received a tax refund! Revenue increased by $5000.",
+                "Product Recall: One of your products has quality issues. A random product's quality decreased by 20 points.",
+                "Employee Bonus: You gave out bonuses to all employees. Happiness increased by 15 points but revenue decreased by $2000."
             };
 
             int eventIndex = random.nextInt(events.length);
-            String eventMessage = events[eventIndex];
+            String eventMessage = "Week " + weeks + " Event: " + events[eventIndex];
 
             switch (eventIndex) {
-                case 0:
-                    revenue += 5000;
+                case 0: 
+                    for (Product p : products) {
+                        p.increaseUsers((int)(p.getUsers() * 0.2));
+                    }
+                    revenue *= 1.15;
                     break;
-                case 1:
-                    revenue -= 2000;
+                case 1: 
+                    for (Product p : products) {
+                        p.increaseUsers(-(int)(p.getUsers() * 0.15));
+                    }
+                    revenue *= 0.9;
                     break;
-                case 2:
-                    revenue -= 3000;
-                    break;
-                case 3:
-                    revenue += 7000;
-                    break;
-                case 4:
+                case 2: 
+                    for (Product p : products) {
+                        p.improveQuality(100); 
+                    }
                     innovationBudget += 2000;
                     break;
-                case 5:
-                    revenue -= 1000;
+                case 3: 
+                    for (Employee e : employees) {
+                        e.decreaseHappiness(20);
+                    }
+                    break;
+                case 4: /
+                    for (Product p : products) {
+                        p.promote(300); 
+                    }
+                    promotionBudget += 1500;
+                    break;
+                case 5: 
+                    for (Product p : products) {
+                        p.degradeQuality(5);
+                    }
+                    break;
+                case 6: 
+                    for (Product p : products) {
+                        p.increaseUsers(-(int)(p.getUsers() * 0.1));
+                    }
+                    break;
+                case 7: 
+                    revenue += 5000;
+                    break;
+                case 8: 
+                    if (!products.isEmpty()) {
+                        Product p = products.get(random.nextInt(products.size()));
+                        p.degradeQuality(20);
+                        eventMessage += " (" + p.getName() + ")";
+                    }
+                    break;
+                case 9: 
+                    for (Employee e : employees) {
+                        e.increaseHappiness(15);
+                    }
+                    revenue -= 2000;
                     break;
             }
 
-            JOptionPane.showMessageDialog(null, eventMessage, "Random Event", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, eventMessage, "Weekly Event", JOptionPane.INFORMATION_MESSAGE);
         }
 
         private double averageProductQuality() {
@@ -298,6 +345,7 @@ public class TycoonGame {
         public double getPromotionBudget() { return promotionBudget; }
         public double getInnovationBudget() { return innovationBudget; }
         public double getStartupBudget() { return startupBudget; }
+        public boolean wasEventTriggeredThisWeek() { return eventTriggeredThisWeek; }
     }
 
     static class Goal {
@@ -354,7 +402,7 @@ public class TycoonGame {
             if (users < 0) users = 0;
         }
 
-        // Getters
+       
         public String getName() { return name; }
         public double getPrice() { return price; }
         public String getField() { return field; }
@@ -387,7 +435,6 @@ public class TycoonGame {
             happiness -= amount;
             if (happiness < 0) happiness = 0;
         }
-
       
         public String getName() { return name; }
         public double getSalary() { return salary; }
@@ -515,7 +562,6 @@ public class TycoonGame {
 
             add(bottomPanel, BorderLayout.SOUTH);
 
-           
             nextWeekButton.addActionListener(e -> nextWeek());
             developProductButton.addActionListener(e -> developProductDialog());
             hireEmployeeButton.addActionListener(e -> hireEmployeeDialog());
