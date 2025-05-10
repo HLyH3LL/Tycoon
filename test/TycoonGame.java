@@ -1,14 +1,15 @@
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 import java.text.DecimalFormat;
 
 public class TycoonGame {
 
     public static void main(String[] args) {
-        // Run GUI creation on EDT
+    
         SwingUtilities.invokeLater(() -> {
             try {
                 new LandingPage();
@@ -21,7 +22,6 @@ public class TycoonGame {
         }); 
     }
 
-    // Landing page where user enters name and starts game with randomized goal
     static class LandingPage extends JFrame {
         private JTextField nameField;
         private JButton startButton;
@@ -101,16 +101,16 @@ public class TycoonGame {
 
         public Game(String playerName) {
             this.playerName = playerName;
-            products = new ArrayList<>();
-            employees = new ArrayList<>();
-            revenue = 0;
-            weeks = 0;
-            isBankrupt = false;
-            random = new Random();
-            promotionBudget = 500;
-            innovationBudget = 500;
-            startupBudget = 10000 + random.nextInt(50000); // Random startup budget between $10,000 and $60,000
-            revenue += startupBudget; // Add startup budget to initial revenue
+            this.products = new ArrayList<>();
+            this.employees = new ArrayList<>();
+            this.revenue = 0;
+            this.weeks = 0;
+            this.isBankrupt = false;
+            this.random = new Random();
+            this.promotionBudget = 500;
+            this.innovationBudget = 500;
+            this.startupBudget = 10000 + random.nextInt(50000);
+            this.revenue += startupBudget;
             generateRandomGoal();
         }
 
@@ -124,7 +124,7 @@ public class TycoonGame {
                             () -> revenue >= revenueGoal && weeks <= weeksLimit);
                     break;
                 }
-                case 1: {[]
+                case 1: {
                     double qualityGoal = 70 + random.nextInt(31);
                     int weeksLimit2 = 15 + random.nextInt(10);
                     goal = new Goal(String.format("Achieve average product quality of %.0f within %d weeks", qualityGoal, weeksLimit2),
@@ -175,12 +175,12 @@ public class TycoonGame {
 
             if (revenue < 0) isBankrupt = true;
 
-            // Trigger a random event at the end of the week
+            
             triggerRandomEvent();
         }
 
         private void triggerRandomEvent() {
-            if (isBankrupt) return; // No events if bankrupt
+            if (isBankrupt) return; 
 
             String[] events = {
                     "A new investor has joined your company! You receive $5000.",
@@ -388,7 +388,7 @@ public class TycoonGame {
             if (happiness < 0) happiness = 0;
         }
 
-        // Getters
+      
         public String getName() { return name; }
         public double getSalary() { return salary; }
         public double getHappiness() { return happiness; }
@@ -515,7 +515,7 @@ public class TycoonGame {
 
             add(bottomPanel, BorderLayout.SOUTH);
 
-            // Listeners
+           
             nextWeekButton.addActionListener(e -> nextWeek());
             developProductButton.addActionListener(e -> developProductDialog());
             hireEmployeeButton.addActionListener(e -> hireEmployeeDialog());
