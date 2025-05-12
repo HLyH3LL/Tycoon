@@ -175,13 +175,13 @@ public class TycoonGame {
             return employeesHappinessAverage() >= threshold && weeks >= requiredWeeks;
         }
 
-        public void progressWeek() {
+       public void progressWeek() {
             weeks++;
             if (isBankrupt) return;
 
             eventTriggeredThisWeek = false;
             currentEvent = "No events this week";
-            
+    
             // 50% chance of an event happening
             if (random.nextDouble() < 0.5) {
                 triggerRandomEvent();
@@ -192,29 +192,43 @@ public class TycoonGame {
 
             for (Product p : products) {
                 int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
-                p.increaseUsers(userGrowth);
+                 p.increaseUsers(userGrowth);
 
                 double revenueFromProduct = p.getUsers() * p.getPrice();
                 totalRevenueThisWeek += revenueFromProduct;
 
                 if (employeesHappinessAverage() < 40) {
-                    p.degradeQuality(1);
-                }
+                 p.degradeQuality(1);
             }
+        }
 
             revenue += totalRevenueThisWeek;
 
             double payroll = 0;
             for (Employee e : employees) {
-                payroll += e.getSalary();
-                if (e.getSalary() < 300) e.decreaseHappiness(5);
+                 payroll += e.getSalary();
+                 if (e.getSalary() < 300) e.decreaseHappiness(5);
             }
+
             revenue -= payroll;
 
             revenue -= (promotionBudget + innovationBudget);
 
-            if (revenue < 0) isBankrupt = true;
+            // Check for bankruptcy
+            if (revenue < 0) {
+                isBankrupt = true;
+                // Call the method to show bankruptcy message
+                showBankruptcyMessage();
         }
+    }
+
+        private void showBankruptcyMessage() {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(null, 
+                  "You have gone bankrupt! Your revenue has reached $0.\nGame Over.", 
+                  "Bankruptcy", JOptionPane.ERROR_MESSAGE);
+    });
+}
 
         private void triggerRandomEvent() {
             if (isBankrupt) return;
@@ -545,6 +559,8 @@ public class TycoonGame {
             setVisible(true);
         }
 
+        
+
         private void initializeComponents() {
             setLayout(new BorderLayout());
 
@@ -704,7 +720,6 @@ public class TycoonGame {
 
         private void nextWeek() {
             if (game.isBankrupt()) {
-                JOptionPane.showMessageDialog(this, "You are bankrupt! Game over. Please restart.", "Game Over", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             game.progressWeek();
@@ -717,7 +732,6 @@ public class TycoonGame {
                     "You Win!", JOptionPane.INFORMATION_MESSAGE);
                 nextWeekButton.setEnabled(false);
             } else if (game.isBankrupt()) {
-                JOptionPane.showMessageDialog(this, "You went bankrupt! Game Over.", "Game Over", JOptionPane.ERROR_MESSAGE);
                 nextWeekButton.setEnabled(false);
             } else if (game.wasEventTriggeredThisWeek()) {
                 // Event details are already shown in the event label
@@ -874,6 +888,7 @@ public class TycoonGame {
             game.addInnovationBudget(500);
             refreshUI();
         }
+
 
         private void surrender() {
             int confirm = JOptionPane.showConfirmDialog(this, 
