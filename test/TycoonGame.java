@@ -99,6 +99,7 @@ public class TycoonGame {
         private double startupBudget;
         private String currentEvent;
         private boolean eventTriggeredThisWeek;
+        JLabel revenueLabel = new JLabel("Revenue: " + revenue);
 
         public Game(String playerName) {
             this.playerName = playerName;
@@ -176,51 +177,60 @@ public class TycoonGame {
         }
 
        public void progressWeek() {
-            weeks++;
-            if (isBankrupt) return;
+    weeks++;
+    if (isBankrupt) return;
 
-            eventTriggeredThisWeek = false;
-            currentEvent = "No events this week";
-    
-            // 50% chance of an event happening
-            if (random.nextDouble() < 0.5) {
-                triggerRandomEvent();
-                eventTriggeredThisWeek = true;
-            }
+    eventTriggeredThisWeek = false;
+    currentEvent = "No events this week";
 
-            double totalRevenueThisWeek = 0;
+    // 50% chance of an event happening
+    if (random.nextDouble() < 0.5) {
+        triggerRandomEvent();
+        eventTriggeredThisWeek = true;
+    }
 
-            for (Product p : products) {
-                int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
-                 p.increaseUsers(userGrowth);
+    double totalRevenueThisWeek = 0;
 
-                double revenueFromProduct = p.getUsers() * p.getPrice();
-                totalRevenueThisWeek += revenueFromProduct;
+    for (Product p : products) {
+        int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
+        p.increaseUsers(userGrowth);
 
-                if (employeesHappinessAverage() < 40) {
-                 p.degradeQuality(1);
-            }
-        }
+        double revenueFromProduct = p.getUsers() * p.getPrice();
+        totalRevenueThisWeek += revenueFromProduct;
 
-            revenue += totalRevenueThisWeek;
-
-            double payroll = 0;
-            for (Employee e : employees) {
-                 payroll += e.getSalary();
-                 if (e.getSalary() < 300) e.decreaseHappiness(5);
-            }
-
-            revenue -= payroll;
-
-            revenue -= (promotionBudget + innovationBudget);
-
-            // Check for bankruptcy
-            if (revenue < 0) {
-                isBankrupt = true;
-                // Call the method to show bankruptcy message
-                showBankruptcyMessage();
+        if (employeesHappinessAverage() < 40) {
+            p.degradeQuality(1);
         }
     }
+
+    revenue += totalRevenueThisWeek;
+
+    double payroll = 0;
+    for (Employee e : employees) {
+        payroll += e.getSalary();
+        if (e.getSalary() < 300) e.decreaseHappiness(5);
+    }
+
+    revenue -= payroll;
+
+    revenue -= (promotionBudget + innovationBudget);
+
+    // Update the revenue label on the GUI
+    revenueLabel.setText("Revenue: " + String.format("%.2f", revenue)); // Make sure 'revenueLabel' is the JLabel showing the revenue
+
+    // Display the revenue added this week
+    JOptionPane.showMessageDialog(null, 
+        String.format("This week's revenue added: $%.2f", totalRevenueThisWeek), 
+        "Weekly Revenue Update", JOptionPane.INFORMATION_MESSAGE);
+
+    // Check for bankruptcy
+    if (revenue < 0) {
+        isBankrupt = true;
+        // Call the method to show bankruptcy message
+        showBankruptcyMessage();
+    }
+}
+
 
         private void showBankruptcyMessage() {
             SwingUtilities.invokeLater(() -> {
