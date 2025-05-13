@@ -176,51 +176,42 @@ public class TycoonGame {
         }
 
        public void progressWeek() {
-            weeks++;
-            if (isBankrupt) return;
+    week++;
+    double totalRevenueThisWeek = 0;
 
-            eventTriggeredThisWeek = false;
-            currentEvent = "No events this week";
-    
-            // 50% chance of an event happening
-            if (random.nextDouble() < 0.5) {
-                triggerRandomEvent();
-                eventTriggeredThisWeek = true;
-            }
+    for (Product p : products) {
+        // Randomly change the number of users (simulate growth or loss)
+        int userChange = random.nextInt(201) - 100; // -100 to +100 users
+        int newUsers = p.getUsers() + userChange;
+        p.setUsers(Math.max(newUsers, 0));
 
-            double totalRevenueThisWeek = 0;
+        // Randomly adjust product quality
+        int qualityChange = random.nextInt(11) - 5; // -5 to +5 quality
+        int newQuality = p.getQuality() + qualityChange;
+        p.setQuality(Math.max(0, Math.min(newQuality, 100))); // Clamp between 0 and 100
 
-            for (Product p : products) {
-                int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
-                 p.increaseUsers(userGrowth);
+        // --- New Revenue Logic Start ---
+        double basePrice = p.getPrice();
+        double engagementFactor = 0.8 + random.nextDouble() * 0.4; // 0.8 to 1.2
+        double qualityMultiplier = (p.getQuality() >= 80) ? 1.3 :
+                                   (p.getQuality() >= 60) ? 1.1 : 0.9;
+        double fieldBonus = switch (p.getField().toLowerCase()) {
+            case "technology" -> 1.2;
+            case "health"     -> 1.15;
+            case "education"  -> 1.1;
+            case "retail"     -> 1.05;
+            default           -> 1.0;
+        };
 
-                double revenueFromProduct = p.getUsers() * p.getPrice();
-                totalRevenueThisWeek += revenueFromProduct;
-
-                if (employeesHappinessAverage() < 40) {
-                 p.degradeQuality(1);
-            }
-        }
-
-            revenue += totalRevenueThisWeek;
-
-            double payroll = 0;
-            for (Employee e : employees) {
-                 payroll += e.getSalary();
-                 if (e.getSalary() < 300) e.decreaseHappiness(5);
-            }
-
-            revenue -= payroll;
-
-            revenue -= (promotionBudget + innovationBudget);
-
-            // Check for bankruptcy
-            if (revenue < 0) {
-                isBankrupt = true;
-                // Call the method to show bankruptcy message
-                showBankruptcyMessage();
-        }
+        double revenueFromProduct = p.getUsers() * basePrice *
+                                    engagementFactor * qualityMultiplier * fieldBonus;
+        totalRevenueThisWeek += revenueFromProduct;
+        // --- New Revenue Logic End ---
     }
+
+    capital += totalRevenueThisWeek;
+}
+
 
         private void showBankruptcyMessage() {
             SwingUtilities.invokeLater(() -> {
