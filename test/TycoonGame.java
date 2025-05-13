@@ -1,10 +1,10 @@
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.List;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.text.DecimalFormat; 
+import javax.swing.*; 
+import javax.swing.border.TitledBorder; 
 
 public class TycoonGame {
 
