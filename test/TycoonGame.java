@@ -1,18 +1,10 @@
-<<<<<<< HEAD
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.*;
-import java.text.DecimalFormat;
-=======
-import java.awt.*;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.*; 
-import javax.swing.border.TitledBorder; 
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
+import java.text.DecimalFormat; 
 
 public class TycoonGame {
 
@@ -26,11 +18,7 @@ public class TycoonGame {
                         "Error initializing game:\n" + ex.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
-<<<<<<< HEAD
-        });
-=======
         }); 
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
     }
 
     static class LandingPage extends JFrame {
@@ -109,24 +97,8 @@ public class TycoonGame {
         private double promotionBudget;
         private double innovationBudget;
         private double startupBudget;
-<<<<<<< HEAD
-
-        public Game(String playerName) {
-            this.playerName = playerName;
-            products = new ArrayList<>();
-            employees = new ArrayList<>();
-            revenue = 0;
-            weeks = 0;
-            isBankrupt = false;
-            random = new Random();
-            promotionBudget = 500;
-            innovationBudget = 500;
-            startupBudget = 10000 + random.nextInt(50000); 
-            revenue += startupBudget; 
-=======
         private String currentEvent;
         private boolean eventTriggeredThisWeek;
-        JLabel revenueLabel = new JLabel("Revenue: " + revenue);
 
         public Game(String playerName) {
             this.playerName = playerName;
@@ -142,36 +114,10 @@ public class TycoonGame {
             this.revenue += startupBudget;
             this.currentEvent = "No events yet";
             this.eventTriggeredThisWeek = false;
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             generateRandomGoal();
         }
 
         private void generateRandomGoal() {
-<<<<<<< HEAD
-            int goalType = random.nextInt(3);
-            switch (goalType) {
-                case 0: {
-                    int revenueGoal = 50000 + random.nextInt(50000);
-                    int weeksLimit = 10 + random.nextInt(10);
-                    goal = new Goal("Achieve revenue of $" + revenueGoal + " within " + weeksLimit + " weeks",
-                            () -> revenue >= revenueGoal && weeks <= weeksLimit);
-                    break;
-                }
-                case 1: {
-                    double qualityGoal = 70 + random.nextInt(31);
-                    int weeksLimit2 = 15 + random.nextInt(10);
-                    goal = new Goal(String.format("Achieve average product quality of %.0f within %d weeks", qualityGoal, weeksLimit2),
-                            () -> averageProductQuality() >= qualityGoal && weeks <= weeksLimit2);
-                    break;
-                }
-                case 2: {
-                    int userGoal = 1000 + random.nextInt(4000);
-                    int weeksLimit3 = 8 + random.nextInt(10);
-                    goal = new Goal("Achieve total users of " + userGoal + " within " + weeksLimit3 + " weeks",
-                            () -> totalUsers() >= userGoal && weeks <= weeksLimit3);
-                    break;
-                }
-=======
             String[] goalTypes = {
                 "Achieve revenue of $%,.0f within %d weeks",
                 "Achieve average product quality of %.0f within %d weeks",
@@ -210,87 +156,12 @@ public class TycoonGame {
                     goal = new Goal(String.format(goalFormat, happinessThreshold, consecutiveWeeks),
                             () -> checkConsecutiveHappiness(happinessThreshold, consecutiveWeeks));
                     break;
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
                 default:
                     goal = new Goal("No goal set", () -> false);
                     break;
             }
         }
 
-<<<<<<< HEAD
-        public void progressWeek() {
-            weeks++;
-            if (isBankrupt) return;
-
-            double totalRevenueThisWeek = 0;
-
-            for (Product p : products) {
-                int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
-                p.increaseUsers(userGrowth);
-
-                double revenueFromProduct = p.getUsers() * p.getPrice();
-                totalRevenueThisWeek += revenueFromProduct;
-
-                if (employeesHappinessAverage() < 40) {
-                    p.degradeQuality(1);
-                }
-            }
-
-            revenue += totalRevenueThisWeek;
-
-            double payroll = 0;
-            for (Employee e : employees) {
-                payroll += e.getSalary();
-                if (e.getSalary() < 300) e.decreaseHappiness(5);
-            }
-            revenue -= payroll;
-
-            revenue -= (promotionBudget + innovationBudget);
-
-            if (revenue < 0) isBankrupt = true;
-
-          
-            triggerRandomEvent();
-        }
-
-        private void triggerRandomEvent() {
-            if (isBankrupt) return; 
-
-            String[] events = {
-                    "A new investor has joined your company! You receive $5000.",
-                    "Market trends have shifted, causing a decline in product sales. Lose $2000.",
-                    "A competitor has launched a similar product. Lose $3000 in revenue.",
-                    "Your product has gone viral! Gain $7000 in revenue.",
-                    "A new technology has emerged, increasing your innovation budget by $2000.",
-                    "Employee morale is low, resulting in a $1000 loss in revenue."
-            };
-
-            int eventIndex = random.nextInt(events.length);
-            String eventMessage = events[eventIndex];
-
-            switch (eventIndex) {
-                case 0:
-                    revenue += 5000;
-                    break;
-                case 1:
-                    revenue -= 2000;
-                    break;
-                case 2:
-                    revenue -= 3000;
-                    break;
-                case 3:
-                    revenue += 7000;
-                    break;
-                case 4:
-                    innovationBudget += 2000;
-                    break;
-                case 5:
-                    revenue -= 1000;
-                    break;
-            }
-
-            JOptionPane.showMessageDialog(null, eventMessage, "Random Event", JOptionPane.INFORMATION_MESSAGE);
-=======
         private int countHighQualityProducts() {
             int count = 0;
             for (Product p : products) {
@@ -305,60 +176,51 @@ public class TycoonGame {
         }
 
        public void progressWeek() {
-    weeks++;
-    if (isBankrupt) return;
+            weeks++;
+            if (isBankrupt) return;
 
-    eventTriggeredThisWeek = false;
-    currentEvent = "No events this week";
+            eventTriggeredThisWeek = false;
+            currentEvent = "No events this week";
+    
+            // 50% chance of an event happening
+            if (random.nextDouble() < 0.5) {
+                triggerRandomEvent();
+                eventTriggeredThisWeek = true;
+            }
 
-    // 50% chance of an event happening
-    if (random.nextDouble() < 0.5) {
-        triggerRandomEvent();
-        eventTriggeredThisWeek = true;
-    }
+            double totalRevenueThisWeek = 0;
 
-    double totalRevenueThisWeek = 0;
+            for (Product p : products) {
+                int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
+                 p.increaseUsers(userGrowth);
 
-    for (Product p : products) {
-        int userGrowth = (int) (p.getQuality() * 1.5 + p.getPromotionEffect() * 10 + employeesHappinessAverage() / 10);
-        p.increaseUsers(userGrowth);
+                double revenueFromProduct = p.getUsers() * p.getPrice();
+                totalRevenueThisWeek += revenueFromProduct;
 
-        double revenueFromProduct = p.getUsers() * p.getPrice();
-        totalRevenueThisWeek += revenueFromProduct;
+                if (employeesHappinessAverage() < 40) {
+                 p.degradeQuality(1);
+            }
+        }
 
-        if (employeesHappinessAverage() < 40) {
-            p.degradeQuality(1);
+            revenue += totalRevenueThisWeek;
+
+            double payroll = 0;
+            for (Employee e : employees) {
+                 payroll += e.getSalary();
+                 if (e.getSalary() < 300) e.decreaseHappiness(5);
+            }
+
+            revenue -= payroll;
+
+            revenue -= (promotionBudget + innovationBudget);
+
+            // Check for bankruptcy
+            if (revenue < 0) {
+                isBankrupt = true;
+                // Call the method to show bankruptcy message
+                showBankruptcyMessage();
         }
     }
-
-    revenue += totalRevenueThisWeek;
-
-    double payroll = 0;
-    for (Employee e : employees) {
-        payroll += e.getSalary();
-        if (e.getSalary() < 300) e.decreaseHappiness(5);
-    }
-
-    revenue -= payroll;
-
-    revenue -= (promotionBudget + innovationBudget);
-
-    // Update the revenue label on the GUI
-    revenueLabel.setText("Revenue: " + String.format("%.2f", revenue)); // Make sure 'revenueLabel' is the JLabel showing the revenue
-
-    // Display the revenue added this week
-    JOptionPane.showMessageDialog(null, 
-        String.format("This week's revenue added: $%.2f", totalRevenueThisWeek), 
-        "Weekly Revenue Update", JOptionPane.INFORMATION_MESSAGE);
-
-    // Check for bankruptcy
-    if (revenue < 0) {
-        isBankrupt = true;
-        // Call the method to show bankruptcy message
-        showBankruptcyMessage();
-    }
-}
-
 
         private void showBankruptcyMessage() {
             SwingUtilities.invokeLater(() -> {
@@ -496,7 +358,6 @@ public class TycoonGame {
                     }
                     break;
             }
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         }
 
         private double averageProductQuality() {
@@ -579,11 +440,8 @@ public class TycoonGame {
         public double getPromotionBudget() { return promotionBudget; }
         public double getInnovationBudget() { return innovationBudget; }
         public double getStartupBudget() { return startupBudget; }
-<<<<<<< HEAD
-=======
         public String getCurrentEvent() { return currentEvent; }
         public boolean wasEventTriggeredThisWeek() { return eventTriggeredThisWeek; }
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
     }
 
     static class Goal {
@@ -623,10 +481,7 @@ public class TycoonGame {
         public void promote(double budget) {
             promotionEffect += budget * 0.05;
             if (promotionEffect > 100) promotionEffect = 100;
-<<<<<<< HEAD
-=======
             if (promotionEffect < 0) promotionEffect = 0;
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         }
 
         public void improveQuality(double innovationBudget) {
@@ -644,10 +499,6 @@ public class TycoonGame {
             if (users < 0) users = 0;
         }
 
-<<<<<<< HEAD
-        // Getters
-=======
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         public String getName() { return name; }
         public double getPrice() { return price; }
         public String getField() { return field; }
@@ -680,12 +531,7 @@ public class TycoonGame {
             happiness -= amount;
             if (happiness < 0) happiness = 0;
         }
-<<<<<<< HEAD
-
-        // Getters
-=======
       
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         public String getName() { return name; }
         public double getSalary() { return salary; }
         public double getHappiness() { return happiness; }
@@ -693,18 +539,6 @@ public class TycoonGame {
 
     static class GameGUI extends JFrame {
         private Game game;
-<<<<<<< HEAD
-
-        private JLabel playerNameLabel, weekLabel, revenueLabel, goalLabel, bankruptLabel;
-        private JLabel promoBudgetLabel, innovationBudgetLabel, empHappinessLabel, startupBudgetLabel;
-        private DefaultListModel<String> productListModel, employeeListModel;
-        private JList<String> productList, employeeList;
-
-        private JButton nextWeekButton, developProductButton, hireEmployeeButton, fireEmployeeButton;
-        private JButton increaseSalaryButton, promoteProductButton, improveQualityButton;
-        private JButton addPromotionBudgetButton, addInnovationBudgetButton, saveGameButton, surrenderButton;
-
-=======
         private JLabel playerNameLabel, weekLabel, revenueLabel, goalLabel, bankruptLabel;
         private JLabel promoBudgetLabel, innovationBudgetLabel, empHappinessLabel, startupBudgetLabel, eventLabel;
         private DefaultListModel<String> productListModel, employeeListModel;
@@ -712,27 +546,12 @@ public class TycoonGame {
         private JButton nextWeekButton, developProductButton, hireEmployeeButton, fireEmployeeButton;
         private JButton increaseSalaryButton, promoteProductButton, improveQualityButton;
         private JButton addPromotionBudgetButton, addInnovationBudgetButton, saveGameButton, surrenderButton;
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         private DecimalFormat df = new DecimalFormat("#,##0.00");
 
         public GameGUI(Game game) {
             this.game = game;
             setTitle("Tycoon Game - Player: " + game.getPlayerName());
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-<<<<<<< HEAD
-            setSize(1000, 700);
-            setLocationRelativeTo(null);
-
-            initializeComponents();
-
-            setVisible(true);
-        }
-
-        private void initializeComponents() {
-            setLayout(new BorderLayout());
-
-            JPanel topPanel = new JPanel(new GridLayout(3, 1));
-=======
             setSize(1000, 750); // Increased height to accommodate event label
             setLocationRelativeTo(null);
 
@@ -746,7 +565,6 @@ public class TycoonGame {
             setLayout(new BorderLayout());
 
             JPanel topPanel = new JPanel(new GridLayout(4, 1)); // Changed to 4 rows for event label
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             JPanel playerInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             playerNameLabel = new JLabel("Player: " + game.getPlayerName());
             weekLabel = new JLabel("Week: 0");
@@ -754,10 +572,6 @@ public class TycoonGame {
             startupBudgetLabel = new JLabel("Startup Budget: $" + df.format(game.getStartupBudget()));
             bankruptLabel = new JLabel("");
             bankruptLabel.setForeground(Color.RED);
-<<<<<<< HEAD
-            goalLabel = new JLabel("Goal: " + game.getGoal().getDescription());
-=======
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             playerInfoPanel.add(playerNameLabel);
             playerInfoPanel.add(Box.createHorizontalStrut(20));
             playerInfoPanel.add(weekLabel);
@@ -769,14 +583,6 @@ public class TycoonGame {
             playerInfoPanel.add(bankruptLabel);
 
             JPanel goalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-<<<<<<< HEAD
-            goalPanel.add(goalLabel);
-
-            topPanel.add(playerInfoPanel);
-            topPanel.add(goalPanel);
-            add(topPanel, BorderLayout.NORTH);
-
-=======
             goalLabel = new JLabel("Goal: " + game.getGoal().getDescription());
             goalPanel.add(goalLabel);
 
@@ -792,7 +598,6 @@ public class TycoonGame {
             add(topPanel, BorderLayout.NORTH);
 
             // Rest of the UI remains the same...
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
 
             JPanel productsPanel = new JPanel(new BorderLayout());
@@ -859,10 +664,6 @@ public class TycoonGame {
 
             add(bottomPanel, BorderLayout.SOUTH);
 
-<<<<<<< HEAD
-            // Listeners
-=======
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             nextWeekButton.addActionListener(e -> nextWeek());
             developProductButton.addActionListener(e -> developProductDialog());
             hireEmployeeButton.addActionListener(e -> hireEmployeeDialog());
@@ -886,8 +687,6 @@ public class TycoonGame {
             innovationBudgetLabel.setText("Innovation Budget: $" + df.format(game.getInnovationBudget()));
             empHappinessLabel.setText(String.format("Avg Employee Happiness: %.1f", game.employeesHappinessAverage()));
             bankruptLabel.setText(game.isBankrupt() ? "You are bankrupt! Game Over." : "");
-<<<<<<< HEAD
-=======
             
             // Update event label with color coding
             if (game.wasEventTriggeredThisWeek()) {
@@ -906,7 +705,6 @@ public class TycoonGame {
                 eventLabel.setText("Event: No events this week");
                 eventLabel.setForeground(Color.BLACK);
             }
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
 
             productListModel.clear();
             for (Product p : game.getProducts()) {
@@ -922,26 +720,12 @@ public class TycoonGame {
 
         private void nextWeek() {
             if (game.isBankrupt()) {
-<<<<<<< HEAD
-                JOptionPane.showMessageDialog(this, "You are bankrupt! Game over. Please restart.", "Game Over", JOptionPane.ERROR_MESSAGE);
-=======
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
                 return;
             }
             game.progressWeek();
             refreshUI();
 
             if (game.checkWin()) {
-<<<<<<< HEAD
-                JOptionPane.showMessageDialog(this, "Congratulations! You achieved the goal:\n" + game.getGoal().getDescription(), "You Win!", JOptionPane.INFORMATION_MESSAGE);
-                nextWeekButton.setEnabled(false);
-            } else if (game.isBankrupt()) {
-                JOptionPane.showMessageDialog(this, "You went bankrupt! Game Over.", "Game Over", JOptionPane.ERROR_MESSAGE);
-                nextWeekButton.setEnabled(false);
-            }
-        }
-
-=======
                 JOptionPane.showMessageDialog(this, 
                     String.format("Congratulations! You achieved the goal in %d weeks:\n%s", 
                         game.getWeeks(), game.getGoal().getDescription()), 
@@ -955,7 +739,6 @@ public class TycoonGame {
         }
 
         // Rest of the methods remain the same...
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         private void developProductDialog() {
             JTextField nameField = new JTextField();
             JTextField priceField = new JTextField();
@@ -1002,11 +785,7 @@ public class TycoonGame {
                     double salary = Double.parseDouble(salaryField.getText().trim());
 
                     if (name.isEmpty() || salary < 0) {
-<<<<<<< HEAD
-                        JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-=======
                         JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.WARNING_MESSAGE);
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
                         return;
                     }
                     game.hireEmployee(name, salary);
@@ -1023,13 +802,9 @@ public class TycoonGame {
                 JOptionPane.showMessageDialog(this, "Select an employee to fire.", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-<<<<<<< HEAD
-            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to fire " + game.getEmployees().get(index).getName() + "?", "Confirm", JOptionPane.YES_NO_OPTION);
-=======
             int confirm = JOptionPane.showConfirmDialog(this, 
                 "Are you sure you want to fire " + game.getEmployees().get(index).getName() + "?", 
                 "Confirm", JOptionPane.YES_NO_OPTION);
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             if (confirm == JOptionPane.YES_OPTION) {
                 game.fireEmployee(index);
                 refreshUI();
@@ -1064,12 +839,8 @@ public class TycoonGame {
                 JOptionPane.showMessageDialog(this, "Select a product to promote.", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-<<<<<<< HEAD
-            String input = JOptionPane.showInputDialog(this, "Enter promotion budget to spend ($): Max $" + df.format(game.getPromotionBudget()));
-=======
             String input = JOptionPane.showInputDialog(this, 
                 "Enter promotion budget to spend ($): Max $" + df.format(game.getPromotionBudget()));
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             if (input != null) {
                 try {
                     double budget = Double.parseDouble(input.trim());
@@ -1091,12 +862,8 @@ public class TycoonGame {
                 JOptionPane.showMessageDialog(this, "Select a product to improve quality.", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-<<<<<<< HEAD
-            String input = JOptionPane.showInputDialog(this, "Enter innovation budget to spend ($): Max $" + df.format(game.getInnovationBudget()));
-=======
             String input = JOptionPane.showInputDialog(this, 
                 "Enter innovation budget to spend ($): Max $" + df.format(game.getInnovationBudget()));
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
             if (input != null) {
                 try {
                     double budget = Double.parseDouble(input.trim());
@@ -1122,12 +889,6 @@ public class TycoonGame {
             refreshUI();
         }
 
-<<<<<<< HEAD
-        private void surrender() {
-            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to surrender?", "Confirm Surrender", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(this, "You surrendered. Game Over.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-=======
 
         private void surrender() {
             int confirm = JOptionPane.showConfirmDialog(this, 
@@ -1137,19 +898,14 @@ public class TycoonGame {
                 JOptionPane.showMessageDialog(this, 
                     "You surrendered after " + game.getWeeks() + " weeks. Game Over.", 
                     "Game Over", JOptionPane.INFORMATION_MESSAGE);
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
                 System.exit(0);
             }
         }
 
         private void saveGame() {
-<<<<<<< HEAD
-            JOptionPane.showMessageDialog(this, "Game saved successfully! (Not really, demo only)", "Save Game", JOptionPane.INFORMATION_MESSAGE);
-=======
             JOptionPane.showMessageDialog(this, 
                 "Game saved successfully! (Not really, demo only)", 
                 "Save Game", JOptionPane.INFORMATION_MESSAGE);
->>>>>>> 020d319239e621308a536cc24b29e4b20cbcaeac
         }
     }
 }
